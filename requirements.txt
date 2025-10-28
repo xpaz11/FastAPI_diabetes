@@ -9,3 +9,10 @@ imbalanced-learn
 joblib
 tensorflow
 streamlit
+seaborn
+keras
+joblib
+requests
+sqlalchemy
+plotly
+matplotlib
