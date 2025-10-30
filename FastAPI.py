@@ -32,6 +32,13 @@ def cargar_datos():
     query = "SELECT * FROM diabetes"
     return pd.read_sql(query, engine)
 
+
+@app.get("/")
+def read_root():
+    return {"message": "Bienvenido a la API"}
+
+#push/endpoint
+
 # ✅ Entrenar modelos y generar gráficas
 @app.get("/train")
 def entrenar_modelos():
@@ -128,7 +135,7 @@ class DiabetesInput(BaseModel):
 
 @app.post("/predict")
 def predict(data: DiabetesInput):
-    model_path = {1: "modelo_diabetes_1.pkl", 2: "modelo_diabetes_2.pkl", 3: "modelo_diabetes_3.h5"}.get(data.modelo_id)
+    model_path = {1: "modelo_diabetes_1.pkl"}.get(data.modelo_id)
     if not model_path or not os.path.exists(model_path):
         raise HTTPException(status_code=404, detail="Modelo no encontrado")
 
