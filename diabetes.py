@@ -15,6 +15,9 @@ from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
 from sqlalchemy import create_engine
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 
 # ✅ Conexión a Neon usando secrets.toml
 connection_string = st.secrets["connections"]["neon"]["url"]
