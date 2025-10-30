@@ -1,0 +1,13 @@
+web:
+  - type: web
+    name: FastAPI_diabetes-1
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn FastAPI:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      
+ 
