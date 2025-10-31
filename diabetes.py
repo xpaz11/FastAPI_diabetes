@@ -22,7 +22,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 # ✅ Cargar datos
 datos = load_data()
 
-API_URL = "https://fastapi-diabetes.onrender.com"
+API_URL = "https://fastapi-diabetes.onrender.com/data"
 
 st.title("Predicción de Diabetes")
 
