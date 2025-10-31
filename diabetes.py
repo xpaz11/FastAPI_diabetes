@@ -16,15 +16,11 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
 from sqlalchemy import create_engine
 import os
+from carga import load_data
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-
-# ✅ Conexión a Neon usando secrets.toml
-connection_string = st.secrets["connections"]["neon"]["url"]
-engine = create_engine(connection_string)
-
 # ✅ Cargar datos
-datos = pd.read_sql("SELECT * FROM diabetes", engine)
+datos = load_data()
 
 API_URL = "https://fastapi-diabetes.onrender.com"
 
