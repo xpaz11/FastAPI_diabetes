@@ -8,7 +8,7 @@ psycopg2-binary
 scikit-learn
 imbalanced-learn
 joblib
-tensorflow
+tensorflow-cpu
 seaborn
 keras
 joblib
