@@ -23,17 +23,9 @@ class DataClient:
 
 @st.cache_data
 def load_data():
-    """
-    Carga los datos desde la API de FastAPI.
-    Se cachea para evitar recargas innecesarias.
-    """
-    client = DataClient(api_url="https://fastapi-diabetes.onrender.com")  # Cambia por la URL real
+    client = DataClient(api_url="https://fastapi-diabetes.onrender.com")
     result = client.get_data()
-
     if not result["success"]:
         st.error(f"❌ Error al cargar datos: {result['error']}")
-        st.info("Verifica que la API FastAPI esté en ejecución.")
         return pd.DataFrame()
-
-    df = pd.DataFrame(result["data"])
-    return df
+    return pd.DataFrame(result["data"])
