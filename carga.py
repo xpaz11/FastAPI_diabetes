@@ -11,7 +11,7 @@ class DataClient:
     def get_data(self):
         """Obtiene los datos de diabetes desde la API"""
         try:
-            response = requests.get(f"{self.api_url}/data", timeout=10)
+            response = requests.get(f"{self.api_url}/data", timeout=100)
             if response.status_code == 200:
                 return {"success": True, "data": response.json()}
             else:
