@@ -1,5 +1,5 @@
-from fastapi import FastAPI, HTTPException
-from sqlalchemy import create_engine
+from fastapi import FastAPI, HTTPException, Request
+from sqlalchemy import create_engine, text
 import pandas as pd
 import os
 
@@ -31,3 +31,19 @@ def get_data():
         return df.to_dict(orient="records")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al cargar datos: {e}")
+
+
+@app.post("/insert")
+async def insert_data(request: Request):
+    try:
+        data = await request.json()
+        query = text("""
+            INSERT INTO diabetes (gender, age, hypertension, heart_disease, smoking_history, bmi, hba1c_level, blood_glucose_level)
+            VALUES (:gender, :age, :hypertension, :heart_disease, :smoking_history, :bmi, :hba1c_level, :blood_glucose_level)
+        """)
+        with engine.connect() as conn:
+            conn.execute(query, **data)
+            conn.commit()
+        return {"message": "Datos insertados correctamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al insertar datos: {e}")
