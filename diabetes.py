@@ -64,19 +64,62 @@ with st.expander("Visualizaciones EDA"):
         labels = ['0-30', '31-45', '46-60', '61-75', '76+']
         datos['age_group'] = pd.cut(datos['age'], bins=bins, labels=labels, right=False)
 
-        st.plotly_chart(px.histogram(datos, x='age_group', color='diabetes', barmode='group',
-                                     title='Distribución de Diabetes por Grupo de Edad',
-                                     category_orders={'age_group': labels}))
-        st.plotly_chart(px.box(datos, x='diabetes', y='bmi', color='diabetes',
-                               title='Boxplot de BMI por Clase de Diabetes'))
-        st.plotly_chart(px.histogram(datos, x='smoking_history', color='gender', facet_col='diabetes',
-                                     title='Distribución de Género y Tabaquismo por Clase de Diabetes'))
-        st.plotly_chart(px.scatter(datos, x='hba1c_level', y='blood_glucose_level', color='diabetes',
-                                   title='Relación entre HbA1c y Glucosa por Clase de Diabetes'))
-        st.plotly_chart(px.histogram(datos, x='gender', color='diabetes', barmode='group',
-                                     title='Distribución de Diabetes por Género'))
-        st.plotly_chart(px.histogram(datos, x='smoking_history', color='diabetes', barmode='group',
-                                     title='Diabetes según Historial de Tabaquismo'))
+        
+    # Gráfico de barras apiladas: Distribución de Diabetes por Edad
+    st.plotly_chart(
+        px.histogram(
+            datos,
+            x='age',
+            color='diabetes',
+            nbins=10,
+            barmode='relative',
+            title='Distribución de Diabetes por Edad (Apilado)'
+        )
+    )
+
+    # Gráfico de barras agrupadas: Distribución de Diabetes por Género
+    st.plotly_chart(
+        px.histogram(
+            datos,
+            x='gender',
+            color='diabetes',
+            barmode='group',
+            title='Distribución de Diabetes por Género'
+        )
+    )
+
+    # Gráfico de barras agrupadas: Diabetes según Historial de Tabaquismo
+    st.plotly_chart(
+        px.histogram(
+            datos,
+            x='smoking_history',
+            color='diabetes',
+            barmode='group',
+            title='Diabetes según Historial de Tabaquismo'
+        )
+    )
+
+    # Gráfico de barras apiladas: Distribución de Diabetes por Hipertensión
+    st.plotly_chart(
+        px.histogram(
+            datos,
+            x='hypertension',
+            color='diabetes',
+            barmode='relative',
+            title='Distribución de Diabetes por Hipertensión'
+        )
+    )
+
+    # Gráfico de barras apiladas: Distribución de Diabetes por Enfermedad Cardiaca
+    st.plotly_chart(
+        px.histogram(
+            datos,
+            x='heart_disease',
+            color='diabetes',
+            barmode='relative',
+            title='Distribución de Diabetes por Enfermedad Cardiaca'
+        )
+    )
 
 # ✅ Entrenamiento de modelos
 with st.expander("Entrenamiento de Modelos"):
