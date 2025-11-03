@@ -110,7 +110,6 @@ elif opcion=="Inicio":
     "Esta herramienta está diseñada para fines educativos y de investigación. No sustituye el diagnóstico médico profesional.")
     st.image("diabetes-symptoms-information-infographic-free-vector.jpg", width=500)
     
-# ✅ Entrenamiento de modelos
 elif opcion == "Entrenamiento de Modelos":
     st.title("Entrenamiento de Modelos")
     if st.button("Entrenar Modelos"):
