@@ -49,7 +49,7 @@ with st.expander("Formulario de Predicción"):
             "blood_glucose_level": blood_glucose_level
         }
         try:
-            response = requests.post(f"{API_URL}/predict", json=payload)
+            response = requests.post(f"{API_URL}/data", json=payload)
             if response.status_code == 200:
                 st.success(f"Resultado: {response.json()['diabetes_prediction']}")
             else:
