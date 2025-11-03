@@ -24,6 +24,29 @@ datos = load_data()
 
 API_URL = "https://fastapi-diabetes.onrender.com/data"
 
+
+usuarios = {
+    "admin": "admin",
+    "usuario": "usuario"
+}
+
+# Estado de sesión
+if "autenticado" not in st.session_state:
+    st.session_state.autenticado = False
+# Formulario de login
+if not st.session_state.autenticado:
+    st.title("Inicio de Sesión")
+    usuario = st.text_input("Usuario")
+    contraseña = st.text_input("Contraseña", type="password")
+    if st.button("Iniciar sesión"):
+        if usuario in usuarios and usuarios[usuario] == contraseña:
+            st.session_state.autenticado = True
+            st.success("Inicio de sesión exitoso")
+        else:
+            st.error("Usuario o contraseña incorrectos")
+    st.stop()  # Detiene la ejecución si no está autenticado
+
+
 st.title("Predicción de Diabetes")
 
 # ✅ Formulario de predicción
