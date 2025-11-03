@@ -24,6 +24,8 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 datos = load_data()
 API_URL = "https://fastapi-diabetes.onrender.com/data"
 
+st.title("🔐 Acceso seguro")
+st.text("Para comenzar, inicia sesión con tu usuario. Una vez dentro, podrás navegar entre las secciones desde el menú lateral.")
 # ✅ Login
 usuarios = {"admin": "admin", "usuario": "usuario"}
 if "autenticado" not in st.session_state:
@@ -42,7 +44,7 @@ if not st.session_state.autenticado:
     st.stop()
 
 # ✅ Navegación lateral
-opcion = st.sidebar.radio("Menú", ["Formulario de Predicción", "Visualizaciones EDA", "Entrenamiento de Modelos"])
+opcion = st.sidebar.radio("Menú", ["Inicio","Formulario de Predicción", "Visualizaciones EDA", "Entrenamiento de Modelos"])
 
 # ✅ Formulario de predicción
 if opcion == "Formulario de Predicción":
@@ -51,7 +53,7 @@ if opcion == "Formulario de Predicción":
     age = st.slider("Edad", 0, 100, 30)
     hypertension = st.selectbox("Hipertensión", [0, 1])
     heart_disease = st.selectbox("Enfermedad cardíaca", [0, 1])
-    smoking_history = st.selectbox("Historial de tabaquismo", ["never", "former", "current"])
+    smoking_history = st.selectbox("Historial de tabaquismo", ["never", "No info", "current", "former","ever", "not current"])
     bmi = st.number_input("BMI", value=25.0)
     hba1c_level = st.number_input("HbA1c", value=5.5)
     blood_glucose_level = st.number_input("Glucosa", value=120)
@@ -99,7 +101,13 @@ elif opcion == "Visualizaciones EDA":
                                  title='Diabetes según Historial de Tabaquismo'))
     st.plotly_chart(px.histogram(datos, x='genero_enfermedad', color='diabetes', barmode='group',
                                  title='Diabetes según Combinación de Género y Enfermedad Cardiaca'))
-
+elif opcion=="Inicio":
+    st.title("🩺 Bienvenido a la Plataforma de Predicción de Diabetes " \
+    "Esta aplicación te permite explorar datos clínicos relacionados con la diabetes, realizar predicciones personalizadas y entrenar modelos de inteligencia artificial para mejorar el diagnóstico." \
+    "🔍 ¿Qué puedes hacer aquí?Completar un formulario con tus datos para obtener una predicción sobre la probabilidad de tener diabetes.Visualizar gráficas interactivas que muestran cómo se relacionan factores como edad, género, tabaquismo y niveles de glucosa con la diabetes.Entrenar modelos de machine learning y comparar su rendimiento.Guardar tus datos en una base de datos segura para análisis posteriores." \
+    "Esta herramienta está diseñada para fines educativos y de investigación. No sustituye el diagnóstico médico profesional.")
+    st.image("diabetes-symptoms-information-infographic-free-vector", width=500)
+    
 # ✅ Entrenamiento de modelos
 elif opcion == "Entrenamiento de Modelos":
     st.title("Entrenamiento de Modelos")
