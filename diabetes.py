@@ -106,7 +106,7 @@ elif opcion=="Inicio":
     st.text("Esta aplicación te permite explorar datos clínicos relacionados con la diabetes, realizar predicciones personalizadas y entrenar modelos de inteligencia artificial para mejorar el diagnóstico." \
     "🔍 ¿Qué puedes hacer aquí?Completar un formulario con tus datos para obtener una predicción sobre la probabilidad de tener diabetes.Visualizar gráficas interactivas que muestran cómo se relacionan factores como edad, género, tabaquismo y niveles de glucosa con la diabetes.Entrenar modelos de machine learning y comparar su rendimiento.Guardar tus datos en una base de datos segura para análisis posteriores." \
     "Esta herramienta está diseñada para fines educativos y de investigación. No sustituye el diagnóstico médico profesional.")
-    st.image("diabetes-symptoms-information-infographic-free-vector", width=500)
+    st.image("diabetes-symptoms-information-infographic-free-vector.jpg", width=500)
     
 # ✅ Entrenamiento de modelos
 elif opcion == "Entrenamiento de Modelos":
