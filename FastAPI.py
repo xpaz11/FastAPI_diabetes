@@ -24,11 +24,10 @@ def root():
 
 @app.get("/data")
 def get_data():
-    """
-    Devuelve los datos de la tabla 'diabetes' almacenada en Neon.
-    """
+    """Devuelve los datos de la tabla 'diabetes' almacenada en Neon."""
     try:
-        df = pd.read_sql("SELECT * FROM diabetes", engine)
+        with engine.connect() as connection:
+            df = pd.read_sql("SELECT * FROM diabetes", connection)
         return df.to_dict(orient="records")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al cargar datos: {e}")
