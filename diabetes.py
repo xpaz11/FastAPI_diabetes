@@ -133,7 +133,7 @@ elif opcion == "Predicción":
         rf_pred = rf.predict(X_test)
 
         # ✅ Matriz de confusión
-        st.subheader("Matriz de Confusión - Random Forest")
+        st.subheader("Matriz de Confusión de Random Forest")
         fig_rf, ax_rf = plt.subplots()
         sns.heatmap(confusion_matrix(y_test, rf_pred), annot=True, fmt='d', cmap='Blues')
         st.pyplot(fig_rf)
