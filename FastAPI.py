@@ -21,8 +21,7 @@ engine = create_engine(DATABASE_URL)
 def root():
     return {"message": "API activa: /data devuelve los datos de diabetes"}
 
-
-@app.get("/data")
+app.get("/data")
 def get_data():
     """Devuelve los datos de la tabla 'diabetes' almacenada en Neon."""
     try:
@@ -41,9 +40,9 @@ async def insert_data(request: Request):
             INSERT INTO diabetes (gender, age, hypertension, heart_disease, smoking_history, bmi, hba1c_level, blood_glucose_level)
             VALUES (:gender, :age, :hypertension, :heart_disease, :smoking_history, :bmi, :hba1c_level, :blood_glucose_level)
         """)
-        with engine.connect() as conn:
+        # ✅ Usa engine.begin() para manejar transacción segura
+        with engine.begin() as conn:
             conn.execute(query, **data)
-            conn.commit()
         return {"message": "Datos insertados correctamente"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al insertar datos: {e}")
