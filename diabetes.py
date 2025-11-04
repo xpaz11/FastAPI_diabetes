@@ -103,65 +103,43 @@ elif opcion == "Visualizaciones EDA":
                                  title='Diabetes según Combinación de Género y Enfermedad Cardiaca'))
 elif opcion=="Inicio":
     st.title("🩺 Bienvenido a la Plataforma de Predicción de Diabetes")
-    st.text("Esta aplicación te permite explorar datos clínicos relacionados con la diabetes, realizar predicciones personalizadas y entrenar modelos de inteligencia artificial para mejorar el diagnóstico." \
-    "🔍 ¿Qué puedes hacer aquí?Completar un formulario con tus datos para obtener una predicción sobre la probabilidad de tener diabetes." \
-    "Visualizar gráficas interactivas que muestran cómo se relacionan factores como edad, género, tabaquismo y niveles de glucosa con la diabetes." \
+    st.text("Esta aplicación te permite explorar datos clínicos relacionados con la diabetes, realizar predicciones personalizadas y entrenar modelos de inteligencia artificial para mejorar el diagnóstico.\n" \
+    "🔍 ¿Qué puedes hacer aquí? Completar un formulario con tus datos para obtener una predicción sobre la probabilidad de tener diabetes.\n" \
+    "Visualizar gráficas interactivas que muestran cómo se relacionan factores como edad, género, tabaquismo y niveles de glucosa con la diabetes.\n" \
     "Entrenar modelos de machine learning y comparar su rendimiento.Guardar tus datos en una base de datos segura para análisis posteriores." \
-    "Esta herramienta está diseñada para fines educativos y de investigación. No sustituye el diagnóstico médico profesional.")
+    "Esta herramienta está diseñada para fines educativos y de investigación. No sustituye el diagnóstico médico profesional.\n")
     st.image("diabetes-symptoms-information-infographic-free-vector.jpg", width=500)
     
-elif opcion == "Entrenamiento de Modelos":
-    st.title("Entrenamiento de Modelos")
-    if st.button("Entrenar Modelos"):
+elif opcion == "Predicción":
+    st.title("Entrenamiento con Random Forest")
+    if st.button("Entrenar Modelo"):
+        # ✅ Preprocesamiento
         num_cols = ['age', 'bmi', 'hba1c_level', 'blood_glucose_level']
         scaler = StandardScaler()
         datos[num_cols] = scaler.fit_transform(datos[num_cols])
+
         X = pd.get_dummies(datos.drop(columns='diabetes'), columns=['gender', 'smoking_history'], drop_first=True)
         y = datos['diabetes']
         X = X.apply(pd.to_numeric, errors='coerce').fillna(0)
+
+        # ✅ División y balanceo
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
         smote = SMOTE(random_state=42)
         X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
 
+        # ✅ Entrenamiento Random Forest
         rf = RandomForestClassifier(random_state=42)
         rf.fit(X_train_res, y_train_res)
         rf_pred = rf.predict(X_test)
+
+        # ✅ Matriz de confusión
         st.subheader("Matriz de Confusión - Random Forest")
         fig_rf, ax_rf = plt.subplots()
         sns.heatmap(confusion_matrix(y_test, rf_pred), annot=True, fmt='d', cmap='Blues')
         st.pyplot(fig_rf)
 
-        lr = LogisticRegression(max_iter=1000)
-        lr.fit(X_train_res, y_train_res)
-        lr_pred = lr.predict(X_test)
-        st.subheader("Matriz de Confusión - Logistic Regression")
-        fig_lr, ax_lr = plt.subplots()
-        sns.heatmap(confusion_matrix(y_test, lr_pred), annot=True, fmt='d', cmap='Blues')
-        st.pyplot(fig_lr)
-
-        model = Sequential([
-            Dense(64, input_dim=X_train_res.shape[1], activation='relu'),
-            Dropout(0.3),
-            Dense(32, activation='relu'),
-            Dense(1, activation='sigmoid')
-        ])
-        model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy', metrics=['accuracy'])
-        early_stop = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-        model.fit(X_train_res, y_train_res, validation_split=0.2, epochs=30, batch_size=64, callbacks=[early_stop])
-        keras_pred = (model.predict(X_test) > 0.5).astype(int)
-        st.subheader("Matriz de Confusión - Keras NN")
-        fig_keras, ax_keras = plt.subplots()
-        sns.heatmap(confusion_matrix(y_test, keras_pred), annot=True, fmt='d', cmap='Blues')
-        st.pyplot(fig_keras)
-
-        resultados = pd.DataFrame({
-            'Modelo': ['Random Forest', 'Logistic Regression', 'Keras NN'],
-            'Accuracy': [accuracy_score(y_test, rf_pred), accuracy_score(y_test, lr_pred), accuracy_score(y_test, keras_pred)],
-            'F1 Score': [f1_score(y_test, rf_pred), f1_score(y_test, lr_pred), f1_score(y_test, keras_pred)]
-        })
-        st.dataframe(resultados)
-        st.subheader("Gráfico Comparativo de Métricas")
-        for metrica in ['Accuracy', 'F1 Score']:
-            fig = plt.figure()
-            sns.barplot(x='Modelo', y=metrica, data=resultados)
-            st.pyplot(fig)
+        # ✅ Métricas
+        accuracy = accuracy_score(y_test, rf_pred)
+        f1 = f1_score(y_test, rf_pred)
+        st.write(f"**Accuracy:** {accuracy:.4f}")
+        st.write(f"**F1 Score:** {f1:.4f}")
