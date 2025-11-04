@@ -30,7 +30,7 @@ def get_data():
             df = pd.read_sql("SELECT * FROM diabetes", connection)
         return df.to_dict(orient="records")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al cargar datos: {e}")
+        raise HTTPException(status_code=500, detail=f"Error carga de datos: {e}")
 
 
 @app.post("/insert")
