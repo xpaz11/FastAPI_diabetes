@@ -44,7 +44,7 @@ if not st.session_state.autenticado:
     st.stop()
 
 # ✅ Navegación lateral
-opcion = st.sidebar.radio("Menú", ["Inicio","Formulario de Predicción", "Visualizaciones EDA", "Entrenamiento de Modelos"])
+opcion = st.sidebar.radio("Menú", ["Inicio","Formulario de Predicción", "Visualizaciones", "Predicción"])
 
 # ✅ Formulario de predicción
 if opcion == "Formulario de Predicción":
