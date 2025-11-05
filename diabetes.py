@@ -110,36 +110,42 @@ elif opcion=="Inicio":
     "Esta herramienta está diseñada para fines educativos y de investigación. No sustituye el diagnóstico médico profesional.\n")
     st.image("diabetes-symptoms-information-infographic-free-vector.jpg", width=500)
     
+
 elif opcion == "Predicción":
     st.title("Entrenamiento con Random Forest")
     if st.button("Entrenar Modelo"):
-        # ✅ Preprocesamiento
-        num_cols = ['age', 'bmi', 'hba1c_level', 'blood_glucose_level']
-        scaler = StandardScaler()
-        datos[num_cols] = scaler.fit_transform(datos[num_cols])
+        # ✅ Mostrar spinner mientras se entrena
+        with st.spinner("Entrenando el modelo, por favor espera..."):
+            # ✅ Preprocesamiento
+            num_cols = ['age', 'bmi', 'hba1c_level', 'blood_glucose_level']
+            scaler = StandardScaler()
+            datos[num_cols] = scaler.fit_transform(datos[num_cols])
 
-        X = pd.get_dummies(datos.drop(columns='diabetes'), columns=['gender', 'smoking_history'], drop_first=True)
-        y = datos['diabetes']
-        X = X.apply(pd.to_numeric, errors='coerce').fillna(0)
+            X = pd.get_dummies(datos.drop(columns='diabetes'), columns=['gender', 'smoking_history'], drop_first=True)
+            y = datos['diabetes']
+            X = X.apply(pd.to_numeric, errors='coerce').fillna(0)
 
-        # ✅ División y balanceo
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
-        smote = SMOTE(random_state=42)
-        X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+            # ✅ División y balanceo
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+            smote = SMOTE(random_state=42)
+            X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
 
-        # ✅ Entrenamiento Random Forest
-        rf = RandomForestClassifier(random_state=42)
-        rf.fit(X_train_res, y_train_res)
-        rf_pred = rf.predict(X_test)
+            # ✅ Entrenamiento Random Forest
+            rf = RandomForestClassifier(random_state=42)
+            rf.fit(X_train_res, y_train_res)
+            rf_pred = rf.predict(X_test)
 
-        # ✅ Matriz de confusión
-        st.subheader("Matriz de confusión de Random Forest")
-        fig_rf, ax_rf = plt.subplots()
-        sns.heatmap(confusion_matrix(y_test, rf_pred), annot=True, fmt='d', cmap='Blues')
-        st.pyplot(fig_rf)
+            # ✅ Matriz de confusión
+            st.subheader("Matriz de confusión de Random Forest")
+            fig_rf, ax_rf = plt.subplots()
+            sns.heatmap(confusion_matrix(y_test, rf_pred), annot=True, fmt='d', cmap='Blues')
+            st.pyplot(fig_rf)
 
-        # ✅ Métricas
-        accuracy = accuracy_score(y_test, rf_pred)
-        f1 = f1_score(y_test, rf_pred)
-        st.write(f"**Accuracy:** {accuracy:.4f}")
-        st.write(f"**F1 Score:** {f1:.4f}")
+            # ✅ Métricas
+            accuracy = accuracy_score(y_test, rf_pred)
+            f1 = f1_score(y_test, rf_pred)
+            st.write(f"**Accuracy:** {accuracy:.4f}")
+            st.write(f"**F1 Score:** {f1:.4f}")
+
+        # ✅ Mensaje cuando termina
+        st.success("Entrenamiento completado ✅")
