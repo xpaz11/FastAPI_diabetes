@@ -38,9 +38,10 @@ async def insert_data(request: Request):
     try:
         data = await request.json()
         query = text("""
-            INSERT INTO diabetes (gender, age, hypertension, heart_disease, smoking_history, bmi, hba1c_level, blood_glucose_level)
-            VALUES (:gender, :age, :hypertension, :heart_disease, :smoking_history, :bmi, :hba1c_level, :blood_glucose_level)
+            INSERT INTO diabetes (gender, age, hypertension, heart_disease, smoking_history, bmi, hba1c_level, blood_glucose_level, diabetes)
+            VALUES (:gender, :age, :hypertension, :heart_disease, :smoking_history, :bmi, :hba1c_level, :blood_glucose_level, :diabetes)
         """)
+
         with engine.connect() as conn:
             conn.execute(query, **data)
             conn.commit()
