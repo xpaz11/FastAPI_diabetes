@@ -5,10 +5,9 @@ import os
 
 app = FastAPI(title="API de Datos de Diabetes")
 
-# ✅ Conexión a Neon (puedes mantenerla en secrets.toml también)
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://neondb_owner:npg_BDG2IiT0aqAy@ep-super-heart-agp17yzq-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+    "postgresql://neondb_owner:tu_password@tu_host/neondb?sslmode=require"
 )
 
 if not DATABASE_URL:
@@ -16,22 +15,18 @@ if not DATABASE_URL:
 
 engine = create_engine(DATABASE_URL)
 
-
 @app.get("/")
 def root():
-    return {"message": "API activa: /data devuelve los datos de diabetes"}
-
+    return {"message": "API activa"}
 
 @app.get("/data")
 def get_data():
-    """Devuelve los datos de la tabla 'diabetes' almacenada en Neon."""
     try:
         with engine.connect() as connection:
             df = pd.read_sql("SELECT * FROM diabetes", connection)
         return df.to_dict(orient="records")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error carga de datos: {e}")
-
 
 @app.post("/insert")
 async def insert_data(request: Request):
@@ -41,10 +36,14 @@ async def insert_data(request: Request):
             INSERT INTO diabetes (gender, age, hypertension, heart_disease, smoking_history, bmi, hba1c_level, blood_glucose_level, diabetes)
             VALUES (:gender, :age, :hypertension, :heart_disease, :smoking_history, :bmi, :hba1c_level, :blood_glucose_level, :diabetes)
         """)
-
-        with engine.connect() as conn:
+        with engine.begin() as conn:  # ✅ Manejo seguro de transacción
             conn.execute(query, **data)
-            conn.commit()
         return {"message": "Datos insertados correctamente"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al insertar datos: {e}")
+
+@app.post("/predict")
+async def predict_diabetes(request: Request):
+    data = await request.json()
+    prediction = 1 if data["hba1c_level"] > 6.5 or data["blood_glucose_level"] > 140 else 0
+    return {"diabetes_prediction": prediction}
