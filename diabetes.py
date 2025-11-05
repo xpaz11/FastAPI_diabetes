@@ -59,8 +59,8 @@ if opcion == "Formulario de Predicción":
     blood_glucose_level = st.number_input("Glucosa", value=120)
     diabetes = st.selectbox("¿Has tenido diabetes anteriormente?", [0, 1], help="0 = No, 1 = Sí")
    
+    
     if st.button("Predecir"):
-        
         payload = {
             "gender": gender,
             "age": age,
@@ -70,16 +70,16 @@ if opcion == "Formulario de Predicción":
             "bmi": bmi,
             "hba1c_level": hba1c_level,
             "blood_glucose_level": blood_glucose_level,
-            "diabetes": diabetes  
+            "diabetes": diabetes
         }
         try:
             # ✅ Llamada para obtener predicción
-            response = requests.post(f"{API_URL}/data", json=payload)
+            response = requests.post(f"{API_URL}/predict", json=payload)
             if response.status_code == 200:
                 st.success(f"Resultado: {response.json()['diabetes_prediction']}")
 
                 # ✅ Guardar datos en la base de datos
-                insert_response = requests.post("https://fastapi-diabetes.onrender.com/insert", json=payload)
+                insert_response = requests.post(f"{API_URL}/insert", json=payload)
                 if insert_response.status_code == 200:
                     st.info("✅ Datos guardados en la base de datos")
                 else:
@@ -88,7 +88,6 @@ if opcion == "Formulario de Predicción":
                 st.error(f"Error: {response.text}")
         except Exception as e:
             st.error(f"No se pudo conectar a la API: {e}")
-
 
 # ✅ Visualizaciones EDA
 elif opcion == "Visualizaciones EDA":
