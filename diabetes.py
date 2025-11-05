@@ -90,8 +90,8 @@ if opcion == "Formulario de Predicción":
             st.error(f"No se pudo conectar a la API: {e}")
 
 # ✅ Visualizaciones EDA
-elif opcion == "Visualizaciones EDA":
-    st.title("Visualizaciones EDA")
+elif opcion == "Visualizaciones":
+    st.title("Visualizaciones")
     bins = [0, 30, 45, 60, 75, 100]
     labels = ['0-30', '31-45', '46-60', '61-75', '76+']
     datos['age_group'] = pd.cut(datos['age'], bins=bins, labels=labels, right=False)
