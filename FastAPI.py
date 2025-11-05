@@ -7,7 +7,7 @@ app = FastAPI(title="API de Datos de Diabetes")
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql://neondb_owner:tu_password@tu_host/neondb?sslmode=require"
+    "postgresql://neondb_owner:npg_BDG2IiT0aqAy@ep-super-heart-agp17yzq-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require"
 )
 
 if not DATABASE_URL:
