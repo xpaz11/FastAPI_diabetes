@@ -23,7 +23,7 @@ class DataClient:
 
 @st.cache_data
 def load_data():
-    client = DataClient(api_url="https://fastapi-diabetes.onrender.com/data")
+    client = DataClient(api_url="https://fastapi-diabetes.onrender.com")
     result = client.get_data()
     if not result["success"]:
         st.error(f"❌ Error al cargar datos: {result['error']}")
