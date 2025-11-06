@@ -36,12 +36,12 @@ async def insert_data(request: Request):
             INSERT INTO diabetes (gender, age, hypertension, heart_disease, smoking_history, bmi, hba1c_level, blood_glucose_level, diabetes)
             VALUES (:gender, :age, :hypertension, :heart_disease, :smoking_history, :bmi, :hba1c_level, :blood_glucose_level, :diabetes)
         """)
-        with engine.begin() as conn:  # ✅ Manejo seguro de transacción
-            conn.execute(query, **data)
+        with engine.begin() as conn:
+            conn.execute(query, data)  # ✅ Correcto
         return {"message": "Datos insertados correctamente"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al insertar datos: {e}")
-
+    
 @app.post("/predict")
 async def predict_diabetes(request: Request):
     data = await request.json()
