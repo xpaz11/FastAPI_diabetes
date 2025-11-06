@@ -11,7 +11,7 @@ DATABASE_URL = os.getenv(
 )
 
 if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL no está definido correctamente")
+    raise RuntimeError("DATABASE_URL no definido correctamente")
 
 engine = create_engine(DATABASE_URL)
 
