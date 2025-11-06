@@ -81,7 +81,7 @@ if opcion == "Formulario de Predicción":
                 # ✅ Guardar datos en la base de datos
                 insert_response = requests.post(f"{API_URL}/insert", json=payload)
                 if insert_response.status_code == 200:
-                    st.info("✅ Datos guardados en la base de datos")
+                    st.info("✅ Datos guardados en la BD")
                 else:
                     st.warning(f"No se pudieron guardar los datos: {insert_response.text}")
             else:
