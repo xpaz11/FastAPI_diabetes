@@ -26,6 +26,6 @@ def load_data():
     client = DataClient(api_url="https://fastapi-diabetes.onrender.com")
     result = client.get_data()
     if not result["success"]:
-        st.error(f"❌ Error al cargar datos: {result['error']}")
+        st.error(f"❌ Error en la carga datos: {result['error']}")
         return pd.DataFrame()
     return pd.DataFrame(result["data"])
