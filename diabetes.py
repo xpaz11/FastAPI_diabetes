@@ -22,7 +22,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # ✅ Cargar datos
 datos = load_data()
-API_URL = "https://fastapi-diabetes.onrender.com/data"
+API_URL = "https://fastapi-diabetes.onrender.com"
 
 st.title("🔐 Acceso seguro")
 st.text("Para comenzar, inicia sesión con tu usuario. Una vez dentro, podrás navegar entre las secciones desde el menú lateral.")
