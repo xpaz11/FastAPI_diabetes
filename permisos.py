@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Table
+from sqlalchemy import Column, Integer, String, ForeignKey, Table, create_engine, text
 from sqlalchemy.orm import relationship, declarative_base
+import os
 
 Base = declarative_base()
 
@@ -36,3 +37,25 @@ class Grupo(Base):
     id = Column(Integer, primary_key=True)
     nombre = Column(String)
     usuarios = relationship('Usuario', secondary=usuario_grupo, back_populates='grupos')
+
+# ✅ Conexión a la base de datos Neon
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://usuario:password@host/db?sslmode=require")
+engine = create_engine(DATABASE_URL)
+
+# ✅ Funciones para permisos
+def obtener_roles(usuario):
+    """Devuelve los roles asociados a un usuario"""
+    query = text("""
+        SELECT r.nombre FROM roles r
+        JOIN usuario_rol ur ON r.id = ur.rol_id
+        JOIN usuarios u ON u.id = ur.usuario_id
+        WHERE u.nombre = :usuario
+    """)
+    with engine.connect() as conn:
+        result = conn.execute(query, {"usuario": usuario}).fetchall()
+    return [row[0] for row in result]
+
+def tiene_permiso(usuario, permiso_requerido):
+    """Verifica si el usuario tiene un rol específico"""
+    roles = obtener_roles(usuario)
+    return permiso_requerido in roles
