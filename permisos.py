@@ -44,7 +44,7 @@ engine = create_engine(DATABASE_URL)
 
 # ✅ Funciones para permisos
 def obtener_roles(usuario):
-    """Devuelve los roles asociados a un usuario"""
+    """devuelve los roles asociados a un usuario"""
     query = text("""
         SELECT r.nombre FROM roles r
         JOIN usuario_rol ur ON r.id = ur.rol_id
