@@ -47,3 +47,16 @@ async def predict_diabetes(request: Request):
     data = await request.json()
     prediction = 1 if data["hba1c_level"] > 6.5 or data["blood_glucose_level"] > 140 else 0
     return {"diabetes_prediction": prediction}
+
+
+@app.get("/get_roles")
+def get_roles(usuario: str):
+    query = text("""
+        SELECT r.nombre FROM roles r
+        JOIN usuario_rol ur ON r.id = ur.rol_id
+        JOIN usuarios u ON u.id = ur.usuario_id
+        WHERE u.nombre = :usuario
+    """)
+    with engine.connect() as conn:
+        result = conn.execute(query, {"usuario": usuario}).fetchall()
+    return {"roles": [row[0] for row in result]}

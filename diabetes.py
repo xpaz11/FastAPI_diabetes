@@ -8,16 +8,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
 from imblearn.over_sampling import SMOTE
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping
-from sqlalchemy import create_engine
 import os
 from carga import load_data
-
+from permisos import obtener_roles, tiene_permiso
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 # ✅ Cargar datos
@@ -26,6 +20,7 @@ API_URL = "https://fastapi-diabetes.onrender.com"
 
 st.title("🔐 Acceso seguro")
 st.text("Para comenzar, inicia sesión con tu usuario. Una vez dentro, podrás navegar entre las secciones desde el menú lateral.")
+
 # ✅ Login
 usuarios = {"admin": "admin", "usuario": "usuario"}
 if "autenticado" not in st.session_state:
@@ -38,13 +33,24 @@ if not st.session_state.autenticado:
     if st.button("Iniciar sesión"):
         if usuario in usuarios and usuarios[usuario] == contraseña:
             st.session_state.autenticado = True
+            st.session_state.usuario = usuario  # ✅ Guardar usuario
             st.success("Inicio de sesión exitoso")
         else:
             st.error("Usuario o contraseña incorrectos")
     st.stop()
 
-# ✅ Navegación lateral
-opcion = st.sidebar.radio("Menú", ["Inicio","Formulario de Predicción", "Visualizaciones", "Predicción"])
+# ✅ Roles y menú dinámico
+usuario_actual = st.session_state.get("usuario")
+roles_usuario = obtener_roles(usuario_actual)
+
+if tiene_permiso(usuario_actual, "admin"):
+    opciones = ["Inicio", "Formulario de Predicción", "Visualizaciones", "Predicción"]
+elif tiene_permiso(usuario_actual, "analista"):
+    opciones = ["Inicio", "Visualizaciones"]
+else:
+    opciones = ["Inicio", "Formulario de Predicción"]
+
+opcion = st.sidebar.radio("Menú", opciones)
 
 # ✅ Formulario de predicción
 if opcion == "Formulario de Predicción":
@@ -97,21 +103,41 @@ elif opcion == "Visualizaciones":
     datos['age_group'] = pd.cut(datos['age'], bins=bins, labels=labels, right=False)
     datos['genero_enfermedad'] = datos['gender'] + ' - ' + datos['heart_disease'].astype(str)
 
+        # Histograma: Distribución de Diabetes por Grupo de Edad
+    st.subheader("Distribución de Diabetes por Grupo de Edad")
     st.plotly_chart(px.histogram(datos, x='age_group', color='diabetes', barmode='group',
-                                 title='Distribución de Diabetes por Grupo de Edad',
-                                 category_orders={'age_group': labels}))
+                                title='Distribución de Diabetes por Grupo de Edad',
+                                category_orders={'age_group': labels}))
+
+    # Boxplot: BMI por Clase de Diabetes
+    st.subheader("Boxplot de BMI por Clase de Diabetes")
     st.plotly_chart(px.box(datos, x='diabetes', y='bmi', color='diabetes',
-                           title='Boxplot de BMI por Clase de Diabetes'))
+                        title='Boxplot de BMI por Clase de Diabetes'))
+
+    # Histograma: Género y Tabaquismo por Clase de Diabetes
+    st.subheader("Distribución de Género y Tabaquismo por Clase de Diabetes")
     st.plotly_chart(px.histogram(datos, x='smoking_history', color='gender', facet_col='diabetes',
-                                 title='Distribución de Género y Tabaquismo por Clase de Diabetes'))
+                                title='Distribución de Género y Tabaquismo por Clase de Diabetes'))
+
+    # Scatter: Relación entre HbA1c y Glucosa
+    st.subheader("Relación entre HbA1c y Glucosa por Clase de Diabetes")
     st.plotly_chart(px.scatter(datos, x='hba1c_level', y='blood_glucose_level', color='diabetes',
-                               title='Relación entre HbA1c y Glucosa por Clase de Diabetes'))
+                            title='Relación entre HbA1c y Glucosa por Clase de Diabetes'))
+
+    # Histograma: Diabetes por Género
+    st.subheader("Distribución de Diabetes por Género")
     st.plotly_chart(px.histogram(datos, x='gender', color='diabetes', barmode='group',
-                                 title='Distribución de Diabetes por Género'))
+                                title='Distribución de Diabetes por Género'))
+
+    # Histograma: Diabetes según Historial de Tabaquismo
+    st.subheader("Diabetes según Historial de Tabaquismo")
     st.plotly_chart(px.histogram(datos, x='smoking_history', color='diabetes', barmode='group',
-                                 title='Diabetes según Historial de Tabaquismo'))
+                                title='Diabetes según Historial de Tabaquismo'))
+
+    # Histograma: Diabetes según Combinación de Género y Enfermedad Cardiaca
+    st.subheader("Diabetes según Combinación de Género y Enfermedad Cardiaca")
     st.plotly_chart(px.histogram(datos, x='genero_enfermedad', color='diabetes', barmode='group',
-                                 title='Diabetes según Combinación de Género y Enfermedad Cardiaca'))
+                                title='Diabetes según Combinación de Género y Enfermedad Cardiaca'))
 elif opcion=="Inicio":
     st.title("🩺 Bienvenido a la Plataforma de Predicción de Diabetes")
     st.text("Esta aplicación te permite explorar datos clínicos relacionados con la diabetes, realizar predicciones personalizadas y entrenar modelos de inteligencia artificial para mejorar el diagnóstico.\n" \
