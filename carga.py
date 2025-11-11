@@ -11,7 +11,7 @@ class DataClient:
     def get_data(self):
         """Obtiene los datos de diabetes desde la API"""
         try:
-            response = requests.get(f"{self.api_url}/data", timeout=30)
+            response = requests.get(f"{self.api_url}/data", timeout=50)
             if response.status_code == 200:
                 return {"success": True, "data": response.json()}
             else:
@@ -23,7 +23,7 @@ class DataClient:
 
 @st.cache_data
 def load_data():
-    client = DataClient(api_url="https://fastapi-diabetes-znau.onrender.com/data")
+    client = DataClient(api_url="https://fastapi-diabetes-znau.onrender.com")
     result = client.get_data()
     if not result["success"]:
         st.error(f"❌ Error en la carga datos: {result['error']}")
