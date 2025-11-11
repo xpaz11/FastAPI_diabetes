@@ -39,16 +39,16 @@ if not st.session_state.autenticado:
             st.error("Usuario o contraseña incorrectos")
     st.stop()
 
-# ✅ Roles y menú dinámico
+# 🧠 Roles y menú dinámico
 usuario_actual = st.session_state.get("usuario")
 roles_usuario = obtener_roles(usuario_actual)
 
 if tiene_permiso(usuario_actual, "admin"):
     opciones = ["Inicio", "Formulario de Predicción", "Visualizaciones", "Predicción"]
-elif tiene_permiso(usuario_actual, "analista"):
-    opciones = ["Inicio", "Visualizaciones"]
+elif tiene_permiso(usuario_actual, "usuario"):
+    opciones = ["Inicio", "Formulario de Predicción", "Visualizaciones"]
 else:
-    opciones = ["Inicio", "Formulario de Predicción"]
+    opciones = ["Inicio"]  # En caso de que no tenga rol definido
 
 opcion = st.sidebar.radio("Menú", opciones)
 
