@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Table, create_engine, text
 from sqlalchemy.orm import relationship, declarative_base
 import os
-
+import streamlit as st
 Base = declarative_base()
 
 # Tabla intermedia para relación muchos a muchos entre usuarios y roles
@@ -41,7 +41,7 @@ class Grupo(Base):
 # ✅ Conexión a la base de datos Neon
 DATABASE_URL = os.getenv("DATABASE_URL", 'postgresql://neondb_owner:npg_BDG2IiT0aqAy@ep-super-heart-agp17yzq-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require')
 engine = create_engine(DATABASE_URL)
-
+@st.cache_data
 # ✅ Funciones para permisos
 def obtener_roles(usuario):
     """devuelve los roles asociados a un usuario"""

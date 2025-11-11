@@ -17,7 +17,7 @@ engine = create_engine(DATABASE_URL)
 
 @app.get("/")
 def root():
-    return {"message": "API activa"}
+    return {"message": "API activate"}
 
 @app.get("/data")
 def get_data():
