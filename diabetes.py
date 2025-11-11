@@ -41,15 +41,18 @@ if not st.session_state.autenticado:
 
 # 🧠 Roles y menú dinámico
 usuario_actual = st.session_state.get("usuario")
+# Obtener roles del usuario
 roles_usuario = obtener_roles(usuario_actual)
 
-if tiene_permiso(usuario_actual, "admin"):
+# Construir menú dinámico según el rol
+if "admin" in roles_usuario:
     opciones = ["Inicio", "Formulario de Predicción", "Visualizaciones", "Predicción"]
-elif tiene_permiso(usuario_actual, "usuario"):
+elif "usuario" in roles_usuario:
     opciones = ["Inicio", "Formulario de Predicción", "Visualizaciones"]
 else:
     opciones = ["Inicio"]  # En caso de que no tenga rol definido
 
+# Mostrar menú en la barra lateral
 opcion = st.sidebar.radio("Menú", opciones)
 
 # ✅ Formulario de predicción
