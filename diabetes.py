@@ -149,10 +149,10 @@ elif opcion == "Visualizaciones":
 elif opcion=="Inicio":
     st.title("🩺 Bienvenido a la Plataforma de Predicción de Diabetes")
     st.text("Esta aplicación te permite explorar datos clínicos relacionados con la diabetes, realizar predicciones personalizadas y entrenar modelos de inteligencia artificial para mejorar el diagnóstico.\n" \
-    "🔍 ¿Qué puedes hacer aquí?\n - Completar un formulario con tus datos para obtener una predicción sobre la probabilidad de tener diabetes.\n" \
-    "- Visualizar gráficas interactivas que muestran cómo se relacionan factores como edad, género, tabaquismo y niveles de glucosa con la diabetes.\n" \
-    "- Entrenar modelos de machine learning y comparar su rendimiento.Guardar tus datos en una base de datos segura para análisis posteriores." \
-    "Esta herramienta está diseñada para fines educativos y de investigación. No sustituye el diagnóstico médico profesional.\n")
+    "🔍 ¿Qué puedes hacer aquí?\n \t \t - Completar un formulario con tus datos para obtener una predicción sobre la probabilidad de tener diabetes.\n" \
+    "\t \t- Visualizar gráficas interactivas que muestran cómo se relacionan factores como edad, género, tabaquismo y niveles de glucosa con la diabetes.\n" \
+    "\t \t- Entrenar modelos de machine learning y comparar su rendimiento.\n \t \t -Guardar tus datos en una base de datos segura para análisis posteriores.\n" \
+    " Esta herramienta está diseñada para fines educativos y de investigación y no sustituye el diagnóstico médico profesional.\n")
     st.image("diabetes-symptoms-information-infographic-free-vector.jpg", width=500)
     
 
