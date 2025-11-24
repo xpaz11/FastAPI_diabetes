@@ -43,8 +43,6 @@ if not st.session_state.autenticado:
 usuario_actual = st.session_state.get("usuario")
 roles_usuario = obtener_roles(usuario_actual)
 
-st.write("DEBUG usuario_actual:", usuario_actual)
-st.write("DEBUG roles_usuario:", roles_usuario)
 # Construir menú dinámico según el rol
 if "admin" in roles_usuario:
     # Admin ve TODO
