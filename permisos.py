@@ -39,10 +39,9 @@ class Grupo(Base):
     usuarios = relationship('Usuario', secondary=usuario_grupo, back_populates='grupos')
 
 # ✅ Conexión a la base de datos Neon
-DATABASE_URL = os.getenv("DATABASE_URL", 'postgresql://neondb_owner:npg_BDG2IiT0aqAy@ep-super-heart-agp17yzq-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require')
+DATABASE_URL = os.getenv("DATABASE_URL",  "postgresql://neondb_owner:npg_BDG2IiT0aqAy@ep-super-heart-agp17yzq-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require")
 engine = create_engine(DATABASE_URL)
 @st.cache_data
-# ✅ Funciones para permisos
 def obtener_roles(usuario):
     """devuelve los roles asociados a un usuario"""
     query = text("""
