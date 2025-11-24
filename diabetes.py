@@ -71,10 +71,10 @@ if opcion == "Formulario de Predicción":
     bmi = st.number_input("BMI", value=25.0)
     hba1c_level = st.number_input("HbA1c", value=5.5)
     blood_glucose_level = st.number_input("Glucosa", value=120)
-    diabetes = st.selectbox("¿Has tenido diabetes anteriormente?", [0, 1], help="0 = No, 1 = Sí")
+    diabetes = st.selectbox("¿Has tenido diabetes?", [0, 1], help="0 = No, 1 = Sí")
    
     
-    if st.button("Predecir"):
+    if st.button("Añadir datos"):
         payload = {
             "gender": gender,
             "age": age,
@@ -105,7 +105,7 @@ if opcion == "Formulario de Predicción":
 
 # ✅ Visualizaciones EDA
 elif opcion == "Visualizaciones":
-    st.title("Visualizaciones")
+    st.title("Visualizaciones de los datos de la sociedad con respecto a la diabetes")
     bins = [0, 30, 45, 60, 75, 100]
     labels = ['0-30', '31-45', '46-60', '61-75', '76+']
     datos['age_group'] = pd.cut(datos['age'], bins=bins, labels=labels, right=False)
@@ -149,9 +149,9 @@ elif opcion == "Visualizaciones":
 elif opcion=="Inicio":
     st.title("🩺 Bienvenido a la Plataforma de Predicción de Diabetes")
     st.text("Esta aplicación te permite explorar datos clínicos relacionados con la diabetes, realizar predicciones personalizadas y entrenar modelos de inteligencia artificial para mejorar el diagnóstico.\n" \
-    "🔍 ¿Qué puedes hacer aquí? Completar un formulario con tus datos para obtener una predicción sobre la probabilidad de tener diabetes.\n" \
-    "Visualizar gráficas interactivas que muestran cómo se relacionan factores como edad, género, tabaquismo y niveles de glucosa con la diabetes.\n" \
-    "Entrenar modelos de machine learning y comparar su rendimiento.Guardar tus datos en una base de datos segura para análisis posteriores." \
+    "🔍 ¿Qué puedes hacer aquí?\n - Completar un formulario con tus datos para obtener una predicción sobre la probabilidad de tener diabetes.\n" \
+    "- Visualizar gráficas interactivas que muestran cómo se relacionan factores como edad, género, tabaquismo y niveles de glucosa con la diabetes.\n" \
+    "- Entrenar modelos de machine learning y comparar su rendimiento.Guardar tus datos en una base de datos segura para análisis posteriores." \
     "Esta herramienta está diseñada para fines educativos y de investigación. No sustituye el diagnóstico médico profesional.\n")
     st.image("diabetes-symptoms-information-infographic-free-vector.jpg", width=500)
     
