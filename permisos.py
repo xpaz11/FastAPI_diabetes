@@ -54,6 +54,7 @@ def obtener_roles(usuario):
         result = conn.execute(query, {"usuario": usuario}).fetchall()
     return [row[0] for row in result]
 
+@st.cache_data
 def tiene_permiso(usuario, permiso_requerido):
     """Verifica si el usuario tiene un rol específico"""
     roles = obtener_roles(usuario)
