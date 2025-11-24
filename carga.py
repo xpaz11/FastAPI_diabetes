@@ -10,8 +10,7 @@ class DataClient:
         if not api_url.endswith("/"):
             api_url += "/"
         self.api_url = api_url
-        
-    @st.cache_data
+
     def get_data(self):
         """Obtiene los datos de diabetes desde la API"""
         try:
